@@ -12,7 +12,7 @@ export default function Page() {
 
   const handleSubmit = async () => {
     if (!apiKey.trim()) {
-      setError("Please enter your OpenAI API Key");
+      setError("please enter your openai api key");
       return;
     }
     setIsLoading(true);
@@ -26,35 +26,35 @@ export default function Page() {
         body: JSON.stringify({ quoteCount, apiKey }),
       });
       if (!response.ok) {
-        throw new Error("Failed to generate quotes");
+        throw new Error("failed to generate quotes");
       }
       const data = await response.json();
       const validatedData = quoteSchema.parse(data);
       setQuotes(validatedData.quotes);
     } catch (error) {
-      console.error("Error:", error);
-      setError("Failed to generate quotes. Please try again.");
+      console.error("error:", error);
+      setError("failed to generate quotes. please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-white dark:bg-black text-black dark:text-white">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 md:p-8 bg-white dark:bg-black text-black dark:text-white transition-colors duration-500">
       <div className="w-full max-w-xl space-y-6">
         <input
           type="password"
-          placeholder="Enter your OpenAI API Key"
+          placeholder="enter your openai api key"
           value={apiKey}
           onChange={(e) => setApiKey(e.target.value)}
-          className="w-full px-4 py-2 text-lg bg-white border border-gray-300 rounded-full shadow-sm dark:bg-black dark:text-white dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+          className="w-full px-4 py-2 text-lg bg-white border border-gray-300 rounded-full shadow-sm dark:bg-black dark:text-white dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors duration-500"
         />
 
-        <div className="flex items-center justify-center space-x-4">
+        <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
           <select
             value={quoteCount}
             onChange={(e) => setQuoteCount(parseInt(e.target.value))}
-            className="px-4 py-2 text-lg bg-white border border-gray-300 rounded-full shadow-sm dark:bg-black dark:text-white dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            className="px-4 py-2 text-lg bg-white border border-gray-300 rounded-full shadow-sm dark:bg-black dark:text-white dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors duration-500"
           >
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
               <option key={num} value={num}>
@@ -63,11 +63,11 @@ export default function Page() {
             ))}
           </select>
           <button
-            className="px-6 py-2 text-lg font-semibold text-white bg-black rounded-full shadow-sm transition-all hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-white dark:text-black dark:hover:bg-gray-200"
+            className="px-6 py-2 text-lg font-semibold text-white bg-black rounded-full shadow-sm transition-all hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-gray-500 dark:bg-white dark:text-black dark:hover:bg-gray-200 transition-colors duration-500"
             onClick={handleSubmit}
             disabled={isLoading}
           >
-            {isLoading ? "Generating..." : "Generate Quotes"}
+            {isLoading ? "generating..." : "generate quotes"}
           </button>
         </div>
 
@@ -77,9 +77,9 @@ export default function Page() {
           {quotes.map((quote, index) => (
             <div
               key={index}
-              className="p-6 bg-white border border-gray-200 rounded-full shadow-sm dark:bg-gray-800 dark:border-gray-700"
+              className="p-8 md:p-12 bg-white border border-gray-200 rounded-full shadow-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden transition-all duration-500 transform translate-y-4 opacity-0 animation-delay-500"
             >
-              <p className="mb-4 text-lg italic text-gray-700 dark:text-gray-300">
+              <p className="mb-4 text-lg italic text-gray-700 dark:text-gray-300 break-words">
                 "{quote.quote}"
               </p>
               <p className="text-right font-medium text-gray-900 dark:text-gray-100">

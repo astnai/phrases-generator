@@ -1,42 +1,35 @@
-# Vercel AI SDK, Next.js, and OpenAI Chat Example
+# silicon valley inspirational quotes generator
 
-This example shows how to use the [Vercel AI SDK](https://sdk.vercel.ai/docs) with [Next.js](https://nextjs.org/) and [OpenAI](https://openai.com) to create a ChatGPT-like AI-powered streaming chat bot.
+this project generates inspirational quotes from silicon valley entrepreneurs using ai. it's built with next.js, typescript, tailwind css, and the openai api, leveraging the vercel ai sdk.
 
-## Deploy your own
+## setup
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=ai-sdk-example):
+1. clone the repository.
+2. install dependencies with `npm install`.
+3. run the development server with `npm run dev`.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fai%2Ftree%2Fmain%2Fexamples%2Fnext-openai&env=OPENAI_API_KEY&envDescription=OpenAI%20API%20Key&envLink=https%3A%2F%2Fplatform.openai.com%2Faccount%2Fapi-keys&project-name=vercel-ai-chat-openai&repository-name=vercel-ai-chat-openai)
+## usage
 
-## How to use
+1. go to the page and enter your openai api key.
+2. select the number of quotes you want to generate.
+3. click "generate quotes" to get your inspirational quotes.
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+## technologies used
 
-```bash
-npx create-next-app --example https://github.com/vercel/ai/tree/main/examples/next-openai next-openai-app
-```
+- next.js
+- typescript
+- tailwind css
+- openai api
+- vercel ai sdk
 
-```bash
-yarn create next-app --example https://github.com/vercel/ai/tree/main/examples/next-openai next-openai-app
-```
+## deployment
 
-```bash
-pnpm create next-app --example https://github.com/vercel/ai/tree/main/examples/next-openai next-openai-app
-```
+to deploy the project, use platforms like vercel or netlify. simply push the repository to your preferred platform and follow their instructions.
 
-To run the example locally you need to:
+## contributing
 
-1. Sign up at [OpenAI's Developer Platform](https://platform.openai.com/signup).
-2. Go to [OpenAI's dashboard](https://platform.openai.com/account/api-keys) and create an API KEY.
-3. Set the required OpenAI environment variable as the token value as shown [the example env file](./.env.local.example) but in a new file called `.env.local`
-4. `pnpm install` to install the required dependencies.
-5. `pnpm dev` to launch the development server.
+feel free to submit issues or pull requests for improvements or fixes.
 
-## Learn More
+## license
 
-To learn more about OpenAI, Next.js, and the Vercel AI SDK take a look at the following resources:
-
-- [Vercel AI SDK docs](https://sdk.vercel.ai/docs)
-- [Vercel AI Playground](https://play.vercel.ai)
-- [OpenAI Documentation](https://platform.openai.com/docs) - learn about OpenAI features and API.
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+this project is open-source and available under the mit license.
