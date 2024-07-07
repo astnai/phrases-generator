@@ -1,11 +1,12 @@
-import './globals.css';
-import { Inter } from 'next/font/google';
+import "./globals.css";
+import { Inter } from "next/font/google";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: 'Vercel AI SDK - Next.js OpenAI Examples',
-  description: 'Examples of using the Vercel AI SDK with Next.js and OpenAI.',
+  title: "Silicon Valley Inspirational Quotes Generator",
+  description:
+    "Generate inspirational quotes from Silicon Valley entrepreneurs using AI.",
 };
 
 export default function RootLayout({
