@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "silicon valley inspirational quotes generator",
+  title: "Quotes generator",
   description:
     "generate inspirational quotes from silicon valley entrepreneurs using ai.",
 };
