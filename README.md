@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # quotes generator
 
 this project generates inspirational quotes from silicon valley entrepreneurs using ai.
@@ -32,6 +31,3 @@ this project is open-source and available under the mit license.
 ---
 
 ![demo](demo.gif)
-=======
-demo
->>>>>>> 91dc99a56bd640cbe1bee4a639f7005472a24f73
