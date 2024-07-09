@@ -89,6 +89,14 @@ export default function Page() {
           ))}
         </div>
       </div>
+      <a
+        href="https://github.com/astnai/phrases-generator"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white hover:underline transition-colors duration-300"
+      >
+        source
+      </a>
     </div>
   );
 }
