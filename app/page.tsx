@@ -65,11 +65,11 @@ export default function Page() {
             id="quoteCount"
             value={quoteCount}
             onChange={(e) => setQuoteCount(parseInt(e.target.value))}
-            className="px-4 py-2 text-lg bg-white border border-gray-300 rounded-full shadow-sm dark:bg-black dark:text-white dark:border-gray-700 outline-none transition-colors duration-500"
+            className="px-2 py-2 text-lg bg-white border border-gray-300 rounded-full shadow-sm dark:bg-black dark:text-white dark:border-gray-700 outline-none transition-colors duration-500"
           >
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
               <option key={num} value={num}>
-                {num} {num === 1 ? "cita" : "frases"}
+                {num} {num === 1 ? "frase" : "frases"}
               </option>
             ))}
           </select>
