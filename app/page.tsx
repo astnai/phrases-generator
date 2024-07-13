@@ -34,7 +34,7 @@ export default function Page() {
     } catch (error) {
       console.error("Error:", error);
       setError(
-        "No se pudieron generar las citas. Por favor, intenta de nuevo."
+        "No se pudieron generar las frases. Por favor, intenta de nuevo."
       );
     } finally {
       setIsLoading(false);
@@ -59,7 +59,7 @@ export default function Page() {
 
         <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4">
           <label htmlFor="quoteCount" className="sr-only">
-            Número de citas
+            Número de frases
           </label>
           <select
             id="quoteCount"
@@ -69,7 +69,7 @@ export default function Page() {
           >
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
               <option key={num} value={num}>
-                {num} {num === 1 ? "cita" : "citas"}
+                {num} {num === 1 ? "cita" : "frases"}
               </option>
             ))}
           </select>
@@ -78,7 +78,7 @@ export default function Page() {
             onClick={handleSubmit}
             disabled={isLoading}
           >
-            {isLoading ? "Generando..." : "Generar citas"}
+            {isLoading ? "Generando..." : "Generar"}
           </button>
         </div>
 
