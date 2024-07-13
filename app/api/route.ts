@@ -31,7 +31,7 @@ export async function POST(req: Request) {
           content: `Generate exactly ${safeQuoteCount} inspirational quotes from Silicon Valley entrepreneurs. Each quote should be unique and attributed to a different entrepreneur. Format the response as a JSON object with a 'quotes' array containing objects with 'author' and 'quote' fields.`,
         },
       ],
-      temperature: 0.7,
+      temperature: 0.8,
     });
 
     const content = completion.choices[0].message.content;
