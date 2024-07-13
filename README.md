@@ -1,6 +1,6 @@
-# quotes generator
+# Phrases generator
 
-this project generates inspirational quotes from silicon valley entrepreneurs using ai.
+this DEMO generates inspirational quotes from silicon valley entrepreneurs using ai.
 
 #### setup
 
