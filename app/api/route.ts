@@ -1,4 +1,5 @@
-import OpenAI from "openai";
+import { createOpenAI } from "@ai-sdk/openai";
+import { generateText } from "ai";
 import { quoteSchema } from "./schema";
 
 export const maxDuration = 30;
@@ -14,32 +15,36 @@ export async function POST(req: Request) {
       });
     }
 
-    const openai = new OpenAI({ apiKey });
+    const openai = createOpenAI({
+      apiKey,
+      compatibility: "strict", // Ensure strict compatibility with OpenAI API
+    });
+
+    const model = openai("gpt-4");
 
     const safeQuoteCount = Math.max(1, Math.min(10, quoteCount));
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo",
+    const { text } = await generateText({
+      model,
       messages: [
         {
           role: "system",
           content:
-            "You are a helpful assistant that generates inspirational quotes from Silicon Valley entrepreneurs.",
+            "Eres un asistente útil que genera citas inspiradoras de emprendedores de Silicon Valley en español.",
         },
         {
           role: "user",
-          content: `Generate exactly ${safeQuoteCount} inspirational quotes from Silicon Valley entrepreneurs. Each quote should be unique and attributed to a different entrepreneur. Format the response as a JSON object with a 'quotes' array containing objects with 'author' and 'quote' fields.`,
+          content: `Genera exactamente ${safeQuoteCount} citas inspiracionales de emprendedores de Silicon Valley. Cada cita debe ser única y atribuida a un emprendedor diferente. Formatea la respuesta como un objeto JSON con un array 'quotes' que contenga objetos con los campos 'author' y 'quote'.`,
         },
       ],
       temperature: 0.8,
     });
 
-    const content = completion.choices[0].message.content;
-    if (!content) {
-      throw new Error("No content generated");
+    if (!text) {
+      throw new Error("No se generó contenido");
     }
 
-    const parsedContent = JSON.parse(content);
+    const parsedContent = JSON.parse(text);
     const validatedQuotes = quoteSchema.parse(parsedContent);
 
     return new Response(JSON.stringify(validatedQuotes), {
@@ -48,7 +53,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("Error:", error);
     return new Response(
-      JSON.stringify({ error: "Failed to generate quotes" }),
+      JSON.stringify({ error: "No se pudieron generar las citas" }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
