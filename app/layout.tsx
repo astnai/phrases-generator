@@ -6,7 +6,10 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "Quotes generator",
   description:
-    "generate inspirational quotes from silicon valley entrepreneurs using ai.",
+    "Generate inspirational quotes from Silicon Valley entrepreneurs using AI.",
+  keywords: "quotes, AI, Silicon Valley, entrepreneurs, inspiration",
+  author: "Your Name",
+  viewport: "width=device-width, initial-scale=1.0",
 };
 
 export default function RootLayout({
@@ -17,7 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {Object.entries(metadata).map(([name, content]) => (
+          <meta key={name} name={name} content={content} />
+        ))}
       </head>
       <body
         className={`${inter.className} bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-500`}
