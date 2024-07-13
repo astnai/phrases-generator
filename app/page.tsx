@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { quoteSchema, Quote } from "./api/use-object/schema";
+import { quoteSchema, Quote } from "./api/schema";
 
 export default function Page() {
   const [apiKey, setApiKey] = useState("");
-  const [quoteCount, setQuoteCount] = useState(3);
+  const [quoteCount, setQuoteCount] = useState(2);
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -18,7 +18,7 @@ export default function Page() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch("/api/use-object", {
+      const response = await fetch("/api", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,8 +40,12 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 md:p-8 bg-white dark:bg-black text-black dark:text-white transition-colors duration-500">
-      <div className="w-full max-w-xl space-y-6">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 md:p-8 bg-white dark:bg-black text-black dark:text-white transition-colors duration-500 text-lg">
+      <h1 className="text-4xl font-bold mb-8">
+        phrase generator / ▲ hackathon
+      </h1>
+
+      <div className="w-full max-w-xl space-y-8">
         <input
           type="password"
           placeholder="enter your openai api key"

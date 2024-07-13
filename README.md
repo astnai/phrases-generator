@@ -16,18 +16,8 @@ this project generates inspirational quotes from silicon valley entrepreneurs us
 
 ### technologies used 
 
-- next.js
+- next.js 14
 - openai api
+  - model gpt-4-turbo 
 - vercel ai sdk
 
-### deployment
-
-to deploy the project, use platforms like vercel or netlify. simply push the repository to your preferred platform and follow their instructions.
-
-### license
-
-this project is open-source and available under the mit license.
-
----
-
-![demo](demo.gif)
