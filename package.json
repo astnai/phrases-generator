@@ -11,11 +11,14 @@
   "dependencies": {
     "@ai-sdk/openai": "^0.0.34",
     "@ai-sdk/react": "latest",
+    "@google-cloud/text-to-speech": "^5.3.0",
     "ai": "^3.2.16",
     "next": "latest",
-    "openai": "4.52.3",
+    "openai": "^4.52.3",
     "react": "^18",
     "react-dom": "^18",
+    "react-icons": "^5.2.1",
+    "react-toastify": "^10.0.5",
     "zod": "3.23.8"
   },
   "devDependencies": {

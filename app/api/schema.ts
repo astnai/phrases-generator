@@ -6,23 +6,27 @@ export const quoteSchema = z.object({
       z.object({
         author: z
           .string()
-          .min(2, "El nombre del autor debe tener al menos 2 caracteres")
-          .max(100, "El nombre del autor no debe exceder los 100 caracteres")
-          .describe("Name of a Silicon Valley entrepreneur"),
+          .min(2, "Author name must be at least 2 characters")
+          .max(100, "Author name must not exceed 100 characters")
+          .describe("Name of a tech entrepreneur"),
         quote: z
           .string()
-          .min(10, "La cita debe tener al menos 10 caracteres")
-          .max(280, "La cita no debe exceder los 280 caracteres")
+          .min(10, "Quote must be at least 10 characters")
+          .max(280, "Quote must not exceed 280 characters")
           .refine(
             (quote) => !quote.includes("http"),
-            "La cita no debe contener URLs"
+            "Quote must not contain URLs"
           )
           .describe("Inspirational quote. Do not use emojis or links."),
       })
     )
-    .min(1, "Debe haber al menos una cita"),
+    .min(1, "There must be at least one quote"),
 });
 
 export type Quote = z.infer<typeof quoteSchema>["quotes"][number];
 
 export type PartialQuote = Partial<Quote>;
+
+export const languageSchema = z.enum(["en", "es"]);
+
+export type Language = z.infer<typeof languageSchema>;
