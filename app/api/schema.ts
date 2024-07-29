@@ -23,10 +23,15 @@ export const quoteSchema = z.object({
     .min(1, "There must be at least one quote"),
 });
 
-export type Quote = z.infer<typeof quoteSchema>["quotes"][number];
-
-export type PartialQuote = Partial<Quote>;
-
 export const languageSchema = z.enum(["en", "es"]);
 
+export const requestSchema = z.object({
+  quoteCount: z.number().int().min(1).max(10),
+  apiKey: z.string().min(1, "API Key is required"),
+  language: languageSchema,
+});
+
+export type Quote = z.infer<typeof quoteSchema>["quotes"][number];
+export type PartialQuote = Partial<Quote>;
 export type Language = z.infer<typeof languageSchema>;
+export type RequestBody = z.infer<typeof requestSchema>;

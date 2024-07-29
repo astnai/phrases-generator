@@ -4,12 +4,12 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "Quotes generator",
+  title: "AI Quote Generator",
   description:
     "Generate inspirational quotes from Silicon Valley entrepreneurs using AI.",
-  keywords: "quotes, AI, Silicon Valley, entrepreneurs, inspiration",
-  author: "Your Name",
+  keywords: "quotes, AI, Silicon Valley, entrepreneurs, inspiration, OpenAI",
   viewport: "width=device-width, initial-scale=1.0",
+  themeColor: "#000000",
 };
 
 export default function RootLayout({
