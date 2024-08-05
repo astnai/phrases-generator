@@ -6,36 +6,36 @@
   color-scheme: light dark;
 }
 
-body {
-  @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100;
+  }
 }
 
-.break-words {
-  word-break: break-word;
-}
+@layer utilities {
+  .break-words {
+    word-break: break-word;
+  }
 
-.overflow-hidden {
-  overflow: hidden;
-}
+  .transition-colors {
+    transition: colors 0.5s;
+  }
 
-.transition-colors {
-  transition: colors 0.5s;
-}
+  .transition-all {
+    transition: all 0.5s;
+  }
 
-.transition-all {
-  transition: all 0.5s;
-}
-
-.animation-delay-500 {
-  animation: fadeInUp 0.5s ease-out forwards;
+  .animation-delay-500 {
+    animation: fadeInUp 0.5s ease-out forwards;
+  }
 }
 
 @keyframes fadeInUp {
-  0% {
+  from {
     transform: translateY(20px);
     opacity: 0;
   }
-  100% {
+  to {
     transform: translateY(0);
     opacity: 1;
   }

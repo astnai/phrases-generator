@@ -1,9 +1,10 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "AI Quote Generator",
   description:
     "Generate inspirational quotes from Silicon Valley entrepreneurs using AI.",
@@ -19,11 +20,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        {Object.entries(metadata).map(([name, content]) => (
-          <meta key={name} name={name} content={content} />
-        ))}
-      </head>
       <body
         className={`${inter.className} bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-500`}
       >

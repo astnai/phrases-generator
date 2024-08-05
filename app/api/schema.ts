@@ -13,11 +13,7 @@ export const quoteSchema = z.object({
           .string()
           .min(10, "Quote must be at least 10 characters")
           .max(280, "Quote must not exceed 280 characters")
-          .refine(
-            (quote) => !quote.includes("http"),
-            "Quote must not contain URLs"
-          )
-          .describe("Inspirational quote. Do not use emojis or links."),
+          .describe("Inspirational quote"),
       })
     )
     .min(1, "There must be at least one quote"),

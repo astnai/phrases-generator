@@ -3,8 +3,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Quote, Language } from "./api/schema";
 
-// Component for displaying individual quotes
-const QuoteCard = ({ quote }: { quote: Quote }) => (
+const QuoteCard: React.FC<{ quote: Quote }> = ({ quote }) => (
   <div className="p-8 md:p-12 bg-white border border-gray-200 rounded-3xl shadow-sm dark:bg-[#1C1C1C] dark:border-gray-700 overflow-hidden transition-all duration-500 transform hover:scale-105">
     <p className="mb-4 text-lg italic text-gray-700 dark:text-gray-300 break-words">
       "{quote.quote}"
@@ -15,35 +14,24 @@ const QuoteCard = ({ quote }: { quote: Quote }) => (
   </div>
 );
 
-// Component for language toggle
-const LanguageToggle = ({
-  language,
-  toggleLanguage,
-}: {
+const LanguageToggle: React.FC<{
   language: Language;
   toggleLanguage: (lang: Language) => void;
-}) => (
+}> = ({ language, toggleLanguage }) => (
   <div className="language-toggle w-full max-w-xl flex justify-end space-x-2">
-    <button
-      onClick={() => toggleLanguage("es")}
-      className={`px-2 py-1 rounded ${
-        language === "es"
-          ? "bg-gray-200 dark:bg-gray-700 font-semibold"
-          : "text-gray-500"
-      }`}
-    >
-      ES
-    </button>
-    <button
-      onClick={() => toggleLanguage("en")}
-      className={`px-2 py-1 rounded ${
-        language === "en"
-          ? "bg-gray-200 dark:bg-gray-700 font-semibold"
-          : "text-gray-500"
-      }`}
-    >
-      EN
-    </button>
+    {["es", "en"].map((lang) => (
+      <button
+        key={lang}
+        onClick={() => toggleLanguage(lang as Language)}
+        className={`px-2 py-1 rounded ${
+          language === lang
+            ? "bg-gray-200 dark:bg-gray-700 font-semibold"
+            : "text-gray-500"
+        }`}
+      >
+        {lang.toUpperCase()}
+      </button>
+    ))}
   </div>
 );
 
@@ -55,7 +43,6 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Function to handle form submission and quote generation
   const handleSubmit = useCallback(async () => {
     if (!apiKey.trim()) {
       setError(
@@ -92,12 +79,10 @@ export default function Page() {
     }
   }, [apiKey, quoteCount, language]);
 
-  // Function to toggle language
   const toggleLanguage = useCallback((newLanguage: Language) => {
     setLanguage(newLanguage);
   }, []);
 
-  // Clear quotes when language changes
   useEffect(() => {
     setQuotes([]);
   }, [language]);

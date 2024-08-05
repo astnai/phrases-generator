@@ -1,6 +1,6 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
-import { quoteSchema, requestSchema, Quote } from "./schema";
+import { quoteSchema, requestSchema, Quote, Language } from "./schema";
 import { ZodError } from "zod";
 
 export const maxDuration = 30;
@@ -8,7 +8,76 @@ export const maxDuration = 30;
 const cache = new Map<string, { quotes: Quote[]; timestamp: number }>();
 const CACHE_DURATION = 1000 * 60 * 60; // 1 hour
 
-export async function POST(req: Request) {
+const getSystemPrompt = (language: Language): string => `
+You are an AI assistant specialized in generating inspirational and thought-provoking quotes from Silicon Valley entrepreneurs. Your task is to create unique, relevant, and attributed quotes that capture the essence of innovation, leadership, and entrepreneurship.
+
+Guidelines:
+1. Generate quotes in ${language === "es" ? "Spanish" : "English"}.
+2. Ensure each quote is unique and attributed to a different entrepreneur.
+3. Include a diverse range of entrepreneurs, considering gender, ethnicity, and areas of expertise.
+4. Focus on lesser-known entrepreneurs as well as established figures.
+5. Avoid using Steve Jobs or Elon Musk unless more than 5 quotes are requested.
+6. Quotes should be concise, impactful, and relevant to technology, innovation, or business.
+7. Ensure the language and tone are appropriate for the attributed entrepreneur.
+8. Do not use emojis or special characters in the quotes or author names.
+9. Do not include URLs or links in the quotes.
+
+Example of a good quote:
+"Innovation is not about saying yes to everything. It's about saying no to all but the most crucial features." - Steve Jobs
+
+Example of a diverse attribution:
+"Build something 100 people love, not something 1 million people kind of like." - Brian Chesky (Airbnb co-founder)
+
+Remember to vary the style, length, and focus of the quotes to maintain interest and diversity.
+`;
+
+const getUserPrompt = (quoteCount: number, language: Language): string => `
+Generate exactly ${quoteCount} inspirational quote${
+  quoteCount > 1 ? "s" : ""
+} from Silicon Valley entrepreneurs, following these criteria:
+
+1. Each quote must be unique and attributed to a different entrepreneur.
+2. Include a diverse mix of entrepreneurs, considering gender, ethnicity, and areas of expertise.
+3. At least 50% of the quotes should be from lesser-known entrepreneurs.
+4. Quotes should be in ${language === "es" ? "Spanish" : "English"}.
+5. Each quote should be between 10 and 100 words long.
+6. Focus on themes of innovation, leadership, perseverance, or vision in technology and business.
+7. Avoid clichés and overly generic statements.
+8. Do not use emojis or special characters in the quotes or author names.
+9. Do not include URLs or links in the quotes.
+
+Format the response as a JSON object with a 'quotes' array containing objects with 'author' and 'quote' fields. Example:
+
+{
+  "quotes": [
+    {
+      "author": "Sheryl Sandberg",
+      "quote": "Done is better than perfect."
+    },
+    {
+      "author": "Reid Hoffman",
+      "quote": "If you are not embarrassed by the first version of your product, you've launched too late."
+    }
+  ]
+}
+
+Ensure that the JSON is valid and properly formatted.
+`;
+
+const verifyQuotes = (quotes: Quote[], quoteCount: number): boolean => {
+  const authors = new Set<string>();
+
+  for (const quote of quotes) {
+    if (authors.has(quote.author)) return false; // Duplicate author
+    authors.add(quote.author);
+
+    if (quote.quote.length < 10 || quote.quote.length > 280) return false; // Quote length check
+  }
+
+  return quotes.length === quoteCount;
+};
+
+export async function POST(req: Request): Promise<Response> {
   try {
     const body = await req.json();
     const { quoteCount, apiKey, language } = requestSchema.parse(body);
@@ -29,42 +98,56 @@ export async function POST(req: Request) {
 
     const model = openai("gpt-4-turbo");
 
-    const systemPrompt =
-      language === "es"
-        ? "Eres un asistente que genera citas inspiradoras de emprendedores de Silicon Valley en español. Las citas deben ser únicas, relevantes y atribuidas a emprendedores reales. Asegúrate de incluir una amplia variedad de emprendedores, no solo los más famosos. Evita repetir autores a menos que sea absolutamente necesario. Incluye emprendedores de diversas áreas tecnológicas y orígenes."
-        : "You are an assistant that generates inspirational quotes from Silicon Valley entrepreneurs in English. The quotes should be unique, relevant, and attributed to real entrepreneurs. Make sure to include a wide variety of entrepreneurs, not just the most famous ones. Avoid repeating authors unless absolutely necessary. Include entrepreneurs from diverse tech areas and backgrounds.";
+    let validQuotes: Quote[] = [];
+    let attempts = 0;
+    const maxAttempts = 3;
 
-    const userPrompt =
-      language === "es"
-        ? `Genera exactamente ${quoteCount} citas inspiracionales de emprendedores de Silicon Valley. Cada cita debe ser única y atribuida a un emprendedor diferente. Asegúrate de incluir una mezcla diversa de emprendedores, incluyendo algunos menos conocidos y de diferentes orígenes étnicos y géneros. No uses a Steve Jobs o Elon Musk a menos que se soliciten más de 5 citas. Formatea la respuesta como un objeto JSON con un array 'quotes' que contenga objetos con los campos 'author' y 'quote'.`
-        : `Generate exactly ${quoteCount} inspirational quotes from Silicon Valley entrepreneurs. Each quote should be unique and attributed to a different entrepreneur. Make sure to include a diverse mix of entrepreneurs, including some lesser-known ones and from different ethnic backgrounds and genders. Don't use Steve Jobs or Elon Musk unless more than 5 quotes are requested. Format the response as a JSON object with a 'quotes' array containing objects with 'author' and 'quote' fields.`;
+    while (attempts < maxAttempts && validQuotes.length === 0) {
+      const { text } = await generateText({
+        model,
+        messages: [
+          { role: "system", content: getSystemPrompt(language) },
+          { role: "user", content: getUserPrompt(quoteCount, language) },
+        ],
+        temperature: 0.8,
+      });
 
-    const { text } = await generateText({
-      model,
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt },
-      ],
-      temperature: 0.8,
-    });
+      if (!text) {
+        throw new Error(
+          language === "es"
+            ? "No se generó contenido"
+            : "No content was generated"
+        );
+      }
 
-    if (!text) {
+      try {
+        const parsedContent = JSON.parse(text);
+        const validatedQuotes = quoteSchema.parse(parsedContent);
+
+        if (verifyQuotes(validatedQuotes.quotes, quoteCount)) {
+          validQuotes = validatedQuotes.quotes;
+        }
+      } catch (error) {
+        console.error("Error parsing or validating quotes:", error);
+      }
+
+      attempts++;
+    }
+
+    if (validQuotes.length === 0) {
       throw new Error(
         language === "es"
-          ? "No se generó contenido"
-          : "No content was generated"
+          ? "No se pudieron generar citas válidas después de varios intentos"
+          : "Unable to generate valid quotes after multiple attempts"
       );
     }
 
-    const parsedContent = JSON.parse(text);
-    const validatedQuotes = quoteSchema.parse(parsedContent);
-
     cache.set(cacheKey, {
-      quotes: validatedQuotes.quotes,
+      quotes: validQuotes,
       timestamp: Date.now(),
     });
 
-    return new Response(JSON.stringify(validatedQuotes), {
+    return new Response(JSON.stringify({ quotes: validQuotes }), {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
@@ -77,7 +160,8 @@ export async function POST(req: Request) {
     }
     return new Response(
       JSON.stringify({
-        error: "Unable to generate quotes. Please try again.",
+        error:
+          error instanceof Error ? error.message : "An unknown error occurred",
       }),
       {
         status: 500,
